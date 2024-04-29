@@ -1,0 +1,16 @@
+api.zhbn.local {
+    root * /var/projects/api/public
+    encode gzip zstd
+    file_server
+    php_fastcgi api:9000
+
+    # SSL Configuration
+    tls /data/local-certs/api.zhbn.local.pem /data/local-certs/api.zhbn.local-key.pem
+}
+
+zhbn.local {
+    reverse_proxy web:3000
+
+    # SSL Configuration
+    tls /data/local-certs/zhbn.local.pem /data/local-certs/zhbn.local-key.pem
+}
