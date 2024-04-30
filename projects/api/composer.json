@@ -50,6 +50,12 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "post-setup-custom":[
+            "@php artisan optimize:clear",
+            "@php artisan migrate",
+            "@php artisan make:filament-user --name Owner --email admin@ertumar.kz --password ertumar@2024 -q",
+            "@php artisan permission"
         ]
     },
     "extra": {
