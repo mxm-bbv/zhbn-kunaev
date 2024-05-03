@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\NewsResource\Pages;
-use App\Filament\Resources\NewsResource\RelationManagers;
 use App\Models\News;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class NewsResource extends Resource
 {
@@ -31,7 +28,18 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Tabs::make('Переводы')
+                    ->tabs(
+                        collect(config('app.locales'))
+                            ->each(
+                                fn($locale) => Forms\Components\Tabs::make(strtoupper($locale))
+                                    ->schema([
+                                        Forms\Components\TextInput::make(sprintf('title.%s', $locale)),
+                                        Forms\Components\TextInput::make(sprintf('description.%s', $locale)),
+                                    ])
+                            )
+                            ->toArray()
+                    )
             ]);
     }
 

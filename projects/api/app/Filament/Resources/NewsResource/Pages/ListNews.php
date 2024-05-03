@@ -10,6 +10,9 @@ class ListNews extends ListRecords
 {
     protected static string $resource = NewsResource::class;
 
+    protected static ?string $navigationLabel = 'Новости';
+    protected static ?string $navigationGroup = 'News';
+
     protected function getHeaderActions(): array
     {
         return [

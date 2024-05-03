@@ -16,12 +16,12 @@ class ApiController extends Controller
     }
 
     /**
-     * @param array $data
+     * @param mixed $data
      * @param int $code
      * @param string $message
      * @return JsonResponse
      */
-    protected function success(array $data, int $code = Response::HTTP_OK, string $message = 'OK'): JsonResponse
+    protected function success(mixed $data, int $code = Response::HTTP_OK, string $message = 'OK'): JsonResponse
     {
         return new JsonResponse(
             data: [
