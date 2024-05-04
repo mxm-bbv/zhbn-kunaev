@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Services\ReCaptchaService;
-use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('Super Admin') ? true : null;
+        });
         $this->app->singleton('recaptcha', fn($app) => new ReCaptchaService());
     }
 }

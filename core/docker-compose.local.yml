@@ -19,7 +19,7 @@ services:
       - "443:443"
     volumes:
       - ./local/caddy/:/etc/caddy/
-      - /home/mxm-bbv/certs/:/data/local-certs/
+      - /home/max/certs/:/data/local-certs/
       - caddy-config:/config
       - caddy-data:/data
       - ../projects:/var/projects

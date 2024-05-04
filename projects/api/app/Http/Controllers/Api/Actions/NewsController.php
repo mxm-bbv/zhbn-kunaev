@@ -12,6 +12,12 @@ use Illuminate\Http\JsonResponse;
 
 class NewsController extends ApiController
 {
+
+    /**
+     * All News list
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         return $this->success(
@@ -23,6 +29,12 @@ class NewsController extends ApiController
         );
     }
 
+    /**
+     * Show an Article
+     *
+     * @param  News  $news
+     * @return JsonResponse
+     */
     public function show(News $news): JsonResponse
     {
         return $this->success([
@@ -30,6 +42,12 @@ class NewsController extends ApiController
         ]);
     }
 
+    /**
+     * Create an Article
+     *
+     * @param StoreNewsFormRequest $request
+     * @return JsonResponse
+     */
     public function store(StoreNewsFormRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
@@ -39,6 +57,13 @@ class NewsController extends ApiController
         ], code: 201);
     }
 
+    /**
+     * Update an Article
+     *
+     * @param UpdateNewsFormRequest $request
+     * @param News $news
+     * @return JsonResponse
+     */
     public function update(UpdateNewsFormRequest $request, News $news): JsonResponse
     {
         $validatedData = $request->validated();
@@ -47,6 +72,12 @@ class NewsController extends ApiController
         return $this->success(new NewsResource($news));
     }
 
+    /**
+     * Hide an Article
+     *
+     * @param News $news
+     * @return JsonResponse
+     */
     public function delete(News $news): JsonResponse
     {
         return $this->success(data: [
@@ -54,6 +85,12 @@ class NewsController extends ApiController
         ], code: 204);
     }
 
+    /**
+     * Delete an Article
+     *
+     * @param News $news
+     * @return JsonResponse
+     */
     public function forceDelete(News $news): JsonResponse
     {
         return $this->success(data: [

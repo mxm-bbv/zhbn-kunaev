@@ -24,6 +24,7 @@ class UsersResource extends Resource
     protected static ?string $title = 'Пользователи';
 
     protected static ?string $breadcrumb = 'Пользователи';
+
     protected static ?string $navigationLabel = 'Пользователи';
 
     protected static ?string $pluralModelLabel = 'Пользователи';
@@ -35,8 +36,15 @@ class UsersResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')->required(),
-                Forms\Components\TextInput::make('email')->email()->required(),
+                Forms\Components\TextInput::make('name')
+                    ->label("Имя"),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->label("Почта"),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required()
+                    ->label("Пароль")
             ]);
     }
 
@@ -44,10 +52,14 @@ class UsersResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('email'),
-
-                Tables\Columns\TextColumn::make('created_at')->label("User Date")->since()
+                Tables\Columns\TextColumn::make('name')->label("Имя"),
+                Tables\Columns\TextColumn::make('email')->label("Почта"),
+                Tables\Columns\TextColumn::make('roles')
+                    ->label("Роль")
+                    ->formatStateUsing(fn (User $user) => $user->getRoleNames()->first()),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label("Зарегистрирован")
+                    ->since()
             ])
             ->filters([
                 //

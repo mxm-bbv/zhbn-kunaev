@@ -29,6 +29,7 @@ class StoreNewsFormRequest extends FormRequest
             'description' => ['required', 'array'],
             'description.ru' => ['required', 'string'],
             'description.kz' => ['sometimes', 'string'],
+            'status' => ['required', 'string'],
         ];
     }
 }
