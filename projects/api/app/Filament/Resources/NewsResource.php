@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\NewsResource\Pages;
 use App\Models\News;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -26,7 +28,7 @@ class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $title = 'Новости';
 
@@ -40,18 +42,17 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Tabs::make('Переводы')
-                    ->tabs(
-                        collect(config('app.locales'))
-                            ->each(
-                                fn($locale) => Forms\Components\Tabs::make(strtoupper($locale))
-                                    ->schema([
-                                        Forms\Components\TextInput::make(sprintf('title.%s', $locale)),
-                                        Forms\Components\TextInput::make(sprintf('description.%s', $locale)),
-                                    ])
-                            )
-                            ->toArray()
-                    )
+                Tabs::make('Переводы')
+                    ->tabs([
+                        Tab::make('kz')->label("Локализация")
+                            ->formatStateUsing(function () {
+                                collect(config('app.locales'))
+                                    ->each(function ($locale) {
+                                        Forms\Components\TextInput::make(sprintf('title.%s', $locale));
+                                        Forms\Components\TextInput::make(sprintf('description.%s', $locale));
+                                    });
+                            })
+                    ])
             ]);
     }
 
@@ -61,7 +62,7 @@ class NewsResource extends Resource
     public static function table(Table $table): Table
     {
         $status = [
-            'draft' => ['Черновик', 'orange'],
+            'draft' => ['Черновик', 'info'],
             'published' => ['Опубликовано', 'success'],
             'archived' => ['Архив', 'danger'],
         ];
@@ -111,8 +112,7 @@ class NewsResource extends Resource
                     ->icon('heroicon-o-arrow-up-on-square-stack')
                     ->color('success')
                     ->hidden(fn(News $news) => match ($news->status) {
-                        'archived' => true,
-                        'published' => true,
+                        'archived', 'published' => true,
                         'draft' => false
                     })
                     ->action(fn(News $state) => $state->trashed() ?
@@ -121,6 +121,15 @@ class NewsResource extends Resource
                             $state->update(['status' => 'published']);
                         } : $state->update(['status' => 'published'])
                     ),
+                Tables\Actions\Action::make('draft')
+                    ->label("В черновик")
+                    ->color("info")
+                    ->icon("heroicon-o-clipboard-document")
+                    ->action(fn(News $news) => $news->update(['status' => 'draft']))
+                    ->hidden(fn(News $news) => match ($news->status) {
+                        'draft', 'archived' => true,
+                        'published' => false,
+                    }),
                 ForceDeleteAction::make()
                     ->label("Удалить")
                     ->successNotification(
