@@ -4,9 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NewsResource\Pages;
 use App\Models\News;
-use Filament\Forms;
+use App\NewsStatusEnum;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -40,19 +41,37 @@ class NewsResource extends Resource
 
     public static function form(Form $form): Form
     {
+
+
+//        collect(config('app.locales'))
+//            ->map(function ($locale) {
+//                return [
+//                    Forms\Components\TextInput::make(sprintf('title.%s', $locale)),
+//                    Forms\Components\TextInput::make(sprintf('description.%s', $locale))
+//                ];
+//            })
+//            ->flatten()
+//            ->toArray()
+
         return $form
             ->schema([
-                Tabs::make('Переводы')
+                Tabs::make('Main Tabs')
                     ->tabs([
-                        Tab::make('kz')->label("Локализация")
-                            ->formatStateUsing(function () {
-                                collect(config('app.locales'))
-                                    ->each(function ($locale) {
-                                        Forms\Components\TextInput::make(sprintf('title.%s', $locale));
-                                        Forms\Components\TextInput::make(sprintf('description.%s', $locale));
-                                    });
-                            })
-                    ])
+                        Tabs\Tab::make('Переводы')
+                            ->schema([
+                                Tabs::make('Языки')
+                                    ->tabs(
+                                        collect(config('app.locales'))
+                                            ->map(fn(string $locale) => Tabs\Tab::make(strtoupper($locale))
+                                                ->label(strtoupper($locale))
+                                                ->schema([
+                                                    TextInput::make(sprintf('title.%s', $locale))->label('Заголовок'),
+                                                    TextInput::make(sprintf('description.%s', $locale))->label('Описание')
+                                                ]))
+                                            ->toArray()
+                                    ),
+                            ]),
+                    ]),
             ]);
     }
 
@@ -61,12 +80,6 @@ class NewsResource extends Resource
      */
     public static function table(Table $table): Table
     {
-        $status = [
-            'draft' => ['Черновик', 'info'],
-            'published' => ['Опубликовано', 'success'],
-            'archived' => ['Архив', 'danger'],
-        ];
-
         return $table
             ->columns([
                 ImageColumn::make('avatar')->label("Картинка"),
@@ -77,8 +90,8 @@ class NewsResource extends Resource
                 TextColumn::make('status')
                     ->label("Статус")
                     ->badge()
-                    ->formatStateUsing(fn($state) => $status[$state][0])
-                    ->color(fn($state) => $status[$state][1]),
+                    ->formatStateUsing(fn($state) => NewsStatusEnum::getStatus(0))
+                    ->color(fn($state) => NewsStatusEnum::getStatusColor(0)),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label("Опубликовано")
                     ->since()
@@ -86,16 +99,15 @@ class NewsResource extends Resource
             ->filters([
                 SelectFilter::make('status')
                     ->label("Статус")
-                    ->options([
-                        'draft' => 'Черновик',
-                        'published' => 'Опубликовано',
-                        'archived' => 'Архив',
-                    ])
+                    ->options(NewsStatusEnum::getStatuses())
             ])
             ->actions([
-                EditAction::make(),
+                EditAction::make()
+                    ->tooltip('Изменить')
+                    ->label(''),
                 Tables\Actions\Action::make('archive')
-                    ->label("Архивировать")
+                    ->tooltip("Архивировать")
+                    ->label("")
                     ->icon('heroicon-o-archive-box')
                     ->color('gray')
                     ->action(fn(News $news) => $news->delete())
@@ -106,23 +118,27 @@ class NewsResource extends Resource
                             ->color('gray')
                             ->title('Новость архивирована')
                             ->body('Новость была успешно архивирована.'),
-                    )->hidden(fn(News $state) => $state->status === 'archived'),
+                    )->hidden(fn(News $state) => $state->status === NewsStatusEnum::ARCHIVED),
                 Tables\Actions\Action::make('publish')
-                    ->label("Опубликовать")
+                    ->tooltip("Опубликовать")
+                    ->label("")
                     ->icon('heroicon-o-arrow-up-on-square-stack')
                     ->color('success')
                     ->hidden(fn(News $news) => match ($news->status) {
-                        'archived', 'published' => true,
-                        'draft' => false
+                        NewsStatusEnum::ARCHIVED, NewsStatusEnum::PUBLISHED => true,
+                        NewsStatusEnum::DRAFT => false
                     })
-                    ->action(fn(News $state) => $state->trashed() ?
-                        function () use (&$state) {
+                    ->action(function (News $state) {
+                        if ($state->trashed()) {
                             $state->restore();
-                            $state->update(['status' => 'published']);
-                        } : $state->update(['status' => 'published'])
+                        }
+
+                        $state->update(['status' => NewsStatusEnum::PUBLISHED]);
+                    }
                     ),
                 Tables\Actions\Action::make('draft')
-                    ->label("В черновик")
+                    ->tooltip("В черновик")
+                    ->label("")
                     ->color("info")
                     ->icon("heroicon-o-clipboard-document")
                     ->action(fn(News $news) => $news->update(['status' => 'draft']))
@@ -131,7 +147,8 @@ class NewsResource extends Resource
                         'published' => false,
                     }),
                 ForceDeleteAction::make()
-                    ->label("Удалить")
+                    ->tooltip("Удалить")
+                    ->label("")
                     ->successNotification(
                         Notification::make()
                             ->success()
@@ -139,6 +156,8 @@ class NewsResource extends Resource
                             ->body('Новость была успешно удалена.'),
                     ),
                 RestoreAction::make()
+                    ->tooltip('Восстановить')
+                    ->label('')
                     ->action(fn(News $state) => $state->restore())
                     ->successNotification(
                         Notification::make()
