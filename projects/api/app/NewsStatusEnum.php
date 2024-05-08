@@ -14,6 +14,12 @@ enum NewsStatusEnum
         2 => self::PUBLISHED
     ];
 
+    const TRANSLATION = [
+        0 => 'Черновик',
+        1 => 'Архив',
+        2 => 'Опубликован'
+    ];
+
     const COLOR = [
         self::DRAFT => 'info',
         self::ARCHIVED => 'danger',
@@ -22,11 +28,16 @@ enum NewsStatusEnum
 
     /**
      * @param int $status
-     * @return int
+     * @return string
      */
-    public static function getStatus(int $status): int
+    public static function getStatus(int $status): string
     {
         return self::STATUS[$status];
+    }
+
+    public static function getStatusTranslation(string $status): string
+    {
+        return self::TRANSLATION[$status];
     }
 
     /**
@@ -38,11 +49,11 @@ enum NewsStatusEnum
     }
 
     /**
-     * @param string $status
+     * @param int $status
      * @return string
      */
-    public static function getStatusColor(string $status): string
+    public static function getStatusColor(int $status): string
     {
-        return self::COLOR[$status];
+        return self::COLOR[self::STATUS[$status]];
     }
 }

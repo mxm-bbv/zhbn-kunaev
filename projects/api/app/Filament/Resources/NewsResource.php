@@ -90,8 +90,8 @@ class NewsResource extends Resource
                 TextColumn::make('status')
                     ->label("Статус")
                     ->badge()
-                    ->formatStateUsing(fn($state) => NewsStatusEnum::getStatus(0))
-                    ->color(fn($state) => NewsStatusEnum::getStatusColor(0)),
+                    ->formatStateUsing(fn($state) => NewsStatusEnum::getStatusTranslation($state))
+                    ->color(fn($state) => NewsStatusEnum::getStatusColor($state)),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label("Опубликовано")
                     ->since()
@@ -118,13 +118,13 @@ class NewsResource extends Resource
                             ->color('gray')
                             ->title('Новость архивирована')
                             ->body('Новость была успешно архивирована.'),
-                    )->hidden(fn(News $state) => $state->status === NewsStatusEnum::ARCHIVED),
+                    )->hidden(fn(News $news) => NewsStatusEnum::getStatus($news->status) === NewsStatusEnum::ARCHIVED),
                 Tables\Actions\Action::make('publish')
                     ->tooltip("Опубликовать")
                     ->label("")
                     ->icon('heroicon-o-arrow-up-on-square-stack')
                     ->color('success')
-                    ->hidden(fn(News $news) => match ($news->status) {
+                    ->hidden(fn(News $news) => match (NewsStatusEnum::getStatus($news->status)) {
                         NewsStatusEnum::ARCHIVED, NewsStatusEnum::PUBLISHED => true,
                         NewsStatusEnum::DRAFT => false
                     })
@@ -141,10 +141,10 @@ class NewsResource extends Resource
                     ->label("")
                     ->color("info")
                     ->icon("heroicon-o-clipboard-document")
-                    ->action(fn(News $news) => $news->update(['status' => 'draft']))
-                    ->hidden(fn(News $news) => match ($news->status) {
-                        'draft', 'archived' => true,
-                        'published' => false,
+                    ->action(fn(News $news) => $news->update(['status' => NewsStatusEnum::DRAFT]))
+                    ->hidden(fn(News $news) => match (NewsStatusEnum::getStatus($news->status)) {
+                        NewsStatusEnum::DRAFT, NewsStatusEnum::ARCHIVED => true,
+                        NewsStatusEnum::PUBLISHED => false,
                     }),
                 ForceDeleteAction::make()
                     ->tooltip("Удалить")
