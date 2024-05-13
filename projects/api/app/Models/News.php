@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -17,10 +19,11 @@ use Spatie\Translatable\HasTranslations;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class News extends Model
+class News extends Model implements HasMedia
 {
     use HasFactory,
         HasTranslations,
+        InteractsWithMedia,
         SoftDeletes;
 
     public array $translatable = [

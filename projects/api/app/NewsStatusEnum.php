@@ -2,58 +2,51 @@
 
 namespace App;
 
-enum NewsStatusEnum
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasIcon;
+use Filament\Support\Contracts\HasLabel;
+
+enum NewsStatusEnum: string implements HasColor, HasIcon, HasLabel
 {
-    public const DRAFT = 'draft';
-    public const PUBLISHED = 'published';
-    public const ARCHIVED = 'archived';
+    case Draft = 'draft';
 
-    const STATUS = [
-        0 => self::DRAFT,
-        1 => self::ARCHIVED,
-        2 => self::PUBLISHED
-    ];
+    case Published = 'published';
 
-    const TRANSLATION = [
-        0 => 'Черновик',
-        1 => 'Архив',
-        2 => 'Опубликован'
-    ];
-
-    const COLOR = [
-        self::DRAFT => 'info',
-        self::ARCHIVED => 'danger',
-        self::PUBLISHED => 'success'
-    ];
+    case Archived = 'archived';
 
     /**
-     * @param int $status
-     * @return string
+     * @return string|null
      */
-    public static function getStatus(int $status): string
+    public function getLabel(): ?string
     {
-        return self::STATUS[$status];
-    }
-
-    public static function getStatusTranslation(string $status): string
-    {
-        return self::TRANSLATION[$status];
+        return match ($this) {
+            self::Draft => 'Черновик',
+            self::Published => 'Опубликован',
+            self::Archived => 'Архив',
+        };
     }
 
     /**
-     * @return string[]
+     * @return string|array|null
      */
-    public static function getStatuses(): array
+    public function getColor(): string|array|null
     {
-        return self::STATUS;
+        return match ($this) {
+            self::Draft => 'info',
+            self::Published => 'success',
+            self::Archived => 'danger',
+        };
     }
 
     /**
-     * @param int $status
-     * @return string
+     * @return string|null
      */
-    public static function getStatusColor(int $status): string
+    public function getIcon(): ?string
     {
-        return self::COLOR[self::STATUS[$status]];
+        return match ($this) {
+            self::Draft => 'heroicon-o-clipboard-document',
+            self::Published => 'heroicon-o-arrow-up-on-square-stack',
+            self::Archived => 'heroicon-o-archive-box',
+        };
     }
 }
