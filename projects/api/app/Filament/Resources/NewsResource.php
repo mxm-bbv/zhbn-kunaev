@@ -14,12 +14,17 @@ use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -52,13 +57,16 @@ class NewsResource extends Resource
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('media')
                                     ->label('Медиа')
+                                    ->collection('media')
                                     ->disk('public')
                                     ->directory('news-media')
                                     ->multiple()
                                     ->reorderable()
-                                    //->customHeaders(['Cache-Control' => 'max-age=86400'])
-                                    ->responsiveImages()
-                                    ->collection('media'),
+//                                    ->rules([
+//                                        'files' => ['sometimes', 'array'],
+//                                        'files.*' => ['mimes:jpg,jpeg,png,webp']
+//                                    ])
+                                    ->customHeaders(['Cache-Control' => 'no-cache']),
                             ])
                     ]),
             ]);
@@ -71,90 +79,96 @@ class NewsResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('avatar')->label("Картинка"),
                 TextColumn::make('title')
                     ->label("Заголовок"),
                 TextColumn::make('description')
-                    ->label("Описание"),
+                    ->label("Описание")
+                    ->limit(50),
                 TextColumn::make('status')
                     ->label("Статус")
-                    ->badge()
-                    ->formatStateUsing(fn($state) => NewsStatusEnum::getStatusTranslation($state))
-                    ->color(fn($state) => NewsStatusEnum::getStatusColor($state)),
+                    ->color(fn($state) => NewsStatusEnum::getStaticColor($state))
+                    ->icon(fn($state) => NewsStatusEnum::getStaticIcon($state))
+                    ->formatStateUsing(fn($state) => NewsStatusEnum::getStaticLabel($state))
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label("Опубликовано")
                     ->since()
             ])
-//            ->filters([
-//                SelectFilter::make('status')
-//                    ->label("Статус")
-//                    ->options(NewsStatusEnum::getStatuses())
-//            ])
-//            ->actions([
-//                EditAction::make()
-//                    ->tooltip('Изменить')
-//                    ->label(''),
-//                Tables\Actions\Action::make('archive')
-//                    ->tooltip("Архивировать")
-//                    ->label("")
-//                    ->icon('heroicon-o-archive-box')
-//                    ->color('gray')
-//                    ->action(fn(News $news) => $news->delete())
-//                    ->successNotification(
-//                        Notification::make()
-//                            ->success()
-//                            ->icon('heroicon-o-archive-box')
-//                            ->color('gray')
-//                            ->title('Новость архивирована')
-//                            ->body('Новость была успешно архивирована.'),
-//                    )->hidden(fn(News $news) => NewsStatusEnum::getStatus($news->status) === NewsStatusEnum::ARCHIVED),
-//                Tables\Actions\Action::make('publish')
-//                    ->tooltip("Опубликовать")
-//                    ->label("")
-//                    ->icon('heroicon-o-arrow-up-on-square-stack')
-//                    ->color('success')
-//                    ->hidden(fn(News $news) => match (NewsStatusEnum::getStatus($news->status)) {
-//                        NewsStatusEnum::ARCHIVED, NewsStatusEnum::PUBLISHED => true,
-//                        NewsStatusEnum::DRAFT => false
-//                    })
-//                    ->action(function (News $state) {
-//                        if ($state->trashed()) {
-//                            $state->restore();
-//                        }
-//
-//                        $state->update(['status' => NewsStatusEnum::PUBLISHED]);
-//                    }
-//                    ),
-//                Tables\Actions\Action::make('draft')
-//                    ->tooltip("В черновик")
-//                    ->label("")
-//                    ->color("info")
-//                    ->icon("heroicon-o-clipboard-document")
-//                    ->action(fn(News $news) => $news->update(['status' => NewsStatusEnum::DRAFT]))
-//                    ->hidden(fn(News $news) => match (NewsStatusEnum::getStatus($news->status)) {
-//                        NewsStatusEnum::DRAFT, NewsStatusEnum::ARCHIVED => true,
-//                        NewsStatusEnum::PUBLISHED => false,
-//                    }),
-//                ForceDeleteAction::make()
-//                    ->tooltip("Удалить")
-//                    ->label("")
-//                    ->successNotification(
-//                        Notification::make()
-//                            ->success()
-//                            ->title('Новость удалена')
-//                            ->body('Новость была успешно удалена.'),
-//                    ),
-//                RestoreAction::make()
-//                    ->tooltip('Восстановить')
-//                    ->label('')
-//                    ->action(fn(News $state) => $state->restore())
-//                    ->successNotification(
-//                        Notification::make()
-//                            ->success()
-//                            ->title('Новость восстановлена')
-//                            ->body('Новость была успешно восстановлена.'),
-//                    )
-//            ])
+            ->filters([
+                SelectFilter::make('status')
+                    ->label("Статус")
+                    ->options(NewsStatusEnum::class)
+            ])
+            ->actions([
+                EditAction::make()
+                    ->tooltip('Изменить')
+                    ->label(''),
+
+                Action::make('archive')
+                    ->tooltip("Архивировать")
+                    ->label("")
+                    ->icon(NewsStatusEnum::getStaticIcon('archived'))
+                    ->color(NewsStatusEnum::getStaticColor('archived'))
+                    ->action(fn(News $news) => $news->delete())
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->icon(NewsStatusEnum::getStaticIcon('archived'))
+                            ->color(NewsStatusEnum::getStaticColor('archived'))
+                            ->title('Новость архивирована')
+                            ->body('Новость была успешно архивирована.'),
+                    )
+                    ->hidden(fn(News $news) => NewsStatusEnum::getStaticLabel($news->status) == NewsStatusEnum::Archived),
+
+                Action::make('publish')
+                    ->tooltip("Опубликовать")
+                    ->label("")
+                    ->icon(NewsStatusEnum::getStaticIcon('published'))
+                    ->color(NewsStatusEnum::getStaticColor('published'))
+                    ->hidden(fn(News $news) => match (NewsStatusEnum::getStaticLabel($news->status)) {
+                        NewsStatusEnum::Archived, NewsStatusEnum::Published => true,
+                        default => false
+                    })
+                    ->action(function (News $news) {
+                        if ($news->trashed()) {
+                            $news->restore();
+                        }
+
+                        $news->update(['status' => NewsStatusEnum::Published]);
+                    }),
+
+                Action::make('draft')
+                    ->tooltip("В черновик")
+                    ->label("")
+                    ->color(NewsStatusEnum::getStaticColor('draft'))
+                    ->icon(NewsStatusEnum::getStaticIcon('draft'))
+                    ->action(fn(News $news) => $news->update(['status' => NewsStatusEnum::Draft]))
+                    ->hidden(fn(News $news) => match (NewsStatusEnum::getStaticLabel($news->status)) {
+                        NewsStatusEnum::Draft, NewsStatusEnum::Archived => true,
+                        default => false,
+                    }),
+
+                ForceDeleteAction::make()
+                    ->tooltip("Удалить")
+                    ->label("")
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Новость удалена')
+                            ->body('Новость была успешно удалена.'),
+                    ),
+
+                RestoreAction::make()
+                    ->tooltip('Восстановить')
+                    ->label('')
+                    ->action(fn(News $state) => $state->restore())
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Новость восстановлена')
+                            ->body('Новость была успешно восстановлена.'),
+                    )
+            ])
             ->bulkActions([
                 BulkActionGroup::make([
                     BulkAction::make('delete')

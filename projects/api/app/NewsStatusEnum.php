@@ -14,6 +14,12 @@ enum NewsStatusEnum: string implements HasColor, HasIcon, HasLabel
 
     case Archived = 'archived';
 
+    const Status = [
+        'draft' => self::Draft,
+        'published' => self::Published,
+        'archived' => self::Archived
+    ];
+
     /**
      * @return string|null
      */
@@ -44,6 +50,33 @@ enum NewsStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getIcon(): ?string
     {
         return match ($this) {
+            self::Draft => 'heroicon-o-clipboard-document',
+            self::Published => 'heroicon-o-arrow-up-on-square-stack',
+            self::Archived => 'heroicon-o-archive-box',
+        };
+    }
+
+    public static function getStaticLabel($status): string
+    {
+        return match (self::Status[$status]) {
+            self::Draft => 'Черновик',
+            self::Published => 'Опубликован',
+            self::Archived => 'Архив',
+        };
+    }
+
+    public static function getStaticColor($status): string
+    {
+        return match (self::Status[$status]) {
+            self::Draft => 'info',
+            self::Published => 'success',
+            self::Archived => 'danger',
+        };
+    }
+
+    public static function getStaticIcon($status): string
+    {
+        return match (self::Status[$status]) {
             self::Draft => 'heroicon-o-clipboard-document',
             self::Published => 'heroicon-o-arrow-up-on-square-stack',
             self::Archived => 'heroicon-o-archive-box',

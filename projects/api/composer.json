@@ -56,7 +56,7 @@
             "@php artisan optimize:clear",
             "@php artisan migrate",
             "@php artisan make:filament-user --name Max --email developer@ertumar.kz --password maxim@2024 -q",
-            "@php artisan permission:sync"
+            "@php artisan permissions:sync"
         ]
     },
     "extra": {
