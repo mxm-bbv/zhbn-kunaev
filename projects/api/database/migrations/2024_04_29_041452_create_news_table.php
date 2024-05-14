@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('description')->nullable();
-            $table->string('status')->default(0);
+            $table->json('title');
+            $table->json('description')->nullable();
+            $table->integer('views')->default(0);
+            $table->string('status')->default(['draft', 'published', 'archived']);
             $table->timestamps();
             $table->softDeletes();
         });

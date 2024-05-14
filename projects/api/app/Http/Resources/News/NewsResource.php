@@ -21,6 +21,10 @@ class NewsResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'description' => $this->description,
+            'views' => $this->views,
+            'status' => $this->status,
+            'media' => $this->getMedia("news-media")
         ];
     }
 }

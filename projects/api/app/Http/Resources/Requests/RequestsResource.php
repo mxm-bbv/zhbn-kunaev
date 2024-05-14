@@ -19,7 +19,10 @@ class RequestsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'requests'
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'message' => $this->message
         ];
     }
 }
