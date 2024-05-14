@@ -15,8 +15,7 @@ class RequestsCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'requests' => $this->collection,
-            ''
+            'requests' => $this->collection
         ];
     }
 }

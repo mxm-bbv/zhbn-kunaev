@@ -16,8 +16,6 @@ class RequestsController extends ApiController
         return $this->success(
             RequestsResource::collection(
                 Requests::query()
-                    ->cursorPaginate()
-                    ->withQueryString()
             )
         );
     }
@@ -50,13 +48,6 @@ class RequestsController extends ApiController
     {
         return $this->success(data: [
             'success' => $requests->delete()
-        ], code: 204);
-    }
-
-    public function forceDelete(Requests $requests): JsonResponse
-    {
-        return $this->success(data: [
-            'success' => $requests->forceDelete()
         ], code: 204);
     }
 }

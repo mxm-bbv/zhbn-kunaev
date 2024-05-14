@@ -20,7 +20,6 @@ class NewsCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-
         return [
             'news' => $this->collection,
             'pagination' => [
