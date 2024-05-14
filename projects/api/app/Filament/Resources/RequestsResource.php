@@ -3,15 +3,16 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RequestsResource\Pages;
-use App\Filament\Resources\RequestsResource\RelationManagers;
 use App\Models\Requests;
-use Filament\Forms;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RequestsResource extends Resource
 {
@@ -31,7 +32,32 @@ class RequestsResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Group::make()
+                    ->schema([
+                        Section::make()
+                            ->columns(2)
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label("Имя")
+                                    ->maxLength(255)
+                                    ->required(),
+                                TextInput::make('email')
+                                    ->label("Почта")
+                                    ->maxLength(255)
+                                    ->unique(ignoreRecord: true)
+                                    ->email()
+                                    ->required(),
+                            ]),
+                        Section::make()
+                            ->schema([
+                                MarkdownEditor::make('message')
+                                    ->label("Сообщение")
+                                    ->disableToolbarButtons([
+                                        'attachFiles',
+                                    ])
+                                    ->required()
+                            ])
+                    ]),
             ]);
     }
 
@@ -39,7 +65,13 @@ class RequestsResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->label("Имя"),
+                TextColumn::make('email')
+                    ->label("Почта"),
+                TextColumn::make('message')
+                    ->label("Сообщение")
+                    ->limit(50),
             ])
             ->filters([
                 //
