@@ -54,9 +54,11 @@
         ],
         "post-setup-custom":[
             "@php artisan optimize:clear",
-            "@php artisan migrate",
+            "@php artisan migrate:fresh",
+            "@php artisan permission:create-role 'Super Admin'",
             "@php artisan make:filament-user --name Max --email developer@ertumar.kz --password maxim@2024 -q",
-            "@php artisan permissions:sync"
+            "@php artisan permissions:sync",
+            "@php artisan permissions:super-admin"
         ]
     },
     "extra": {
