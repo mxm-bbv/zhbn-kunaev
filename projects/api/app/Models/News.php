@@ -12,8 +12,9 @@ use Spatie\Translatable\HasTranslations;
 
 /**
  * @property int    $id
- * @property string $title
- * @property string $description
+ * @property string|array $title
+ * @property string|array $description
+ * @property int    $views
  * @property string $status
  *
  * @property Carbon $created_at
@@ -38,7 +39,8 @@ class News extends Model implements HasMedia
     protected $fillable = [
         'title',
         'description',
-        'status'
+        'views',
+        'status',
     ];
 
     protected $guarded = [

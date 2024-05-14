@@ -57,7 +57,7 @@ class NewsResource extends Resource
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('media')
                                     ->label('Медиа')
-                                    ->collection('media')
+                                    ->collection('news-media')
                                     ->disk('public')
                                     ->directory('news-media')
                                     ->multiple()
@@ -225,14 +225,14 @@ class NewsResource extends Resource
                             ->schema([
                                 TextInput::make(sprintf('title.%s', $locale))
                                     ->label('Заголовок')
-                                    ->required(),
+                                    ->when($locale == 'ru', fn(TextInput $field) => $field->required()),
                                 MarkdownEditor::make(sprintf('description.%s', $locale))
                                     ->label('Описание')
                                     ->columnSpan('full')
                                     ->disableToolbarButtons([
                                         'attachFiles',
                                     ])
-                                    ->required()
+                                    ->when($locale == 'ru', fn(MarkdownEditor $field) => $field->required()),
                             ]))
                         ->toArray()
                 ),
