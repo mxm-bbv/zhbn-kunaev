@@ -23,7 +23,9 @@ class DeleteRequestFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string',
+            'email' => 'required|string|email',
+            'message' => 'required|string'
         ];
     }
 }
