@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\NewsResource\Pages;
 
-use App\Filament\Resources\NewsResource;
+use App\Filament\Resources\ArticlesResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListNews extends ListRecords
+class ListArticles extends ListRecords
 {
-    protected static string $resource = NewsResource::class;
+    protected static string $resource = ArticlesResource::class;
 
     protected static ?string $navigationLabel = 'Новости';
     protected static ?string $navigationGroup = 'Articles';

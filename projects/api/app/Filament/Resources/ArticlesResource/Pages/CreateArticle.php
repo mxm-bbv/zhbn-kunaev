@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\NewsResource\Pages;
 
-use App\Filament\Resources\NewsResource;
+use App\Filament\Resources\ArticlesResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateNews extends CreateRecord
+class CreateArticle extends CreateRecord
 {
-    protected static string $resource = NewsResource::class;
+    protected static string $resource = ArticlesResource::class;
 
 
 }

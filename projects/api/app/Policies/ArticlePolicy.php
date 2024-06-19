@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use Illuminate\Auth\Access\Response;
-use App\Models\News;
+use App\Models\Article;
 use App\Models\User;
 
-class NewsPolicy
+class ArticlePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class NewsPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, News $news): bool
+    public function view(User $user, Article $news): bool
     {
         return $user->checkPermissionTo('view Articles');
     }
@@ -35,7 +35,7 @@ class NewsPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, News $news): bool
+    public function update(User $user, Article $news): bool
     {
         return $user->checkPermissionTo('update Articles');
     }
@@ -43,7 +43,7 @@ class NewsPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, News $news): bool
+    public function delete(User $user, Article $news): bool
     {
         return $user->checkPermissionTo('delete Articles');
     }
@@ -51,7 +51,7 @@ class NewsPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, News $news): bool
+    public function restore(User $user, Article $news): bool
     {
         return $user->checkPermissionTo('restore Articles');
     }
@@ -59,7 +59,7 @@ class NewsPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, News $news): bool
+    public function forceDelete(User $user, Article $news): bool
     {
         return $user->checkPermissionTo('force-delete Articles');
     }

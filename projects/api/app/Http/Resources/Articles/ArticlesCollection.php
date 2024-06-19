@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\News;
+namespace App\Http\Resources\Articles;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -9,9 +9,9 @@ use Illuminate\Pagination\CursorPaginator;
 /**
  * @mixin CursorPaginator
  */
-class NewsCollection extends ResourceCollection
+class ArticlesCollection extends ResourceCollection
 {
-    public $collects = NewsResource::class;
+    public $collects = ArticleResource::class;
 
     /**
      * Transform the resource collection into an array.

@@ -5,7 +5,7 @@ namespace App\Http\Requests\Articles;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreNewsFormRequest extends FormRequest
+class StoreArticleFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

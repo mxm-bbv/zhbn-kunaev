@@ -20,7 +20,7 @@ use Spatie\Translatable\HasTranslations;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class News extends Model implements HasMedia
+class Article extends Model implements HasMedia
 {
     use HasFactory,
         HasTranslations,

@@ -3,39 +3,38 @@
 namespace App\Http\Controllers\Api\Actions;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\News\StoreNewsFormRequest;
-use App\Http\Requests\News\UpdateNewsFormRequest;
-use App\Http\Resources\News\NewsResource;
-use App\Models\News;
+use App\Http\Resources\Articles\ArticleResource;
+use App\Http\Resources\Articles\ArticlesCollection;
+use App\Models\Article;
 use Illuminate\Http\JsonResponse;
 
-class NewsController extends ApiController
+class ArticleController extends ApiController
 {
 
     /**
-     * All News list
+     * All Articles list
      *
      * @return JsonResponse
      */
     public function index(): JsonResponse
     {
-        $news = News::query()
+        $news = Article::query()
             ->cursorPaginate()
             ->withQueryString();
 
-        return $this->success(NewsResource::collection($news));
+        return $this->success(new ArticlesCollection($news));
     }
 
     /**
      * Show an Article
      *
-     * @param  News  $news
+     * @param Article $article
      * @return JsonResponse
      */
-    public function show(News $news): JsonResponse
+    public function show(Article $article): JsonResponse
     {
         return $this->success([
-            'article' => new NewsResource($news)
+            'article' => new ArticleResource($article)
         ]);
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\NewsResource\Pages;
 
-use App\Filament\Resources\NewsResource;
+use App\Filament\Resources\ArticlesResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditNews extends EditRecord
+class EditArticle extends EditRecord
 {
-    protected static string $resource = NewsResource::class;
+    protected static string $resource = ArticlesResource::class;
 
     protected function getHeaderActions(): array
     {

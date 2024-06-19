@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Resources\News;
+namespace App\Http\Resources\Articles;
 
-use App\Models\News;
+use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin News
+ * @mixin Article
  */
-class NewsResource extends JsonResource
+class ArticleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -25,6 +25,10 @@ class NewsResource extends JsonResource
             'views' => $this->views,
             'status' => $this->status,
             'media' => $this->getMedia("news-media")
+                ->map(fn($media) => [
+                    'name' => $media['name'],
+                    'url' => $media['original_url'],
+                ])
         ];
     }
 }
