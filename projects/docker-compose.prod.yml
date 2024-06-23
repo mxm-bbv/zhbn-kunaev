@@ -31,8 +31,6 @@ services:
       - ./web:/var/projects/web
     working_dir: /var/projects/web
     entrypoint: [ "/bin/sh", "-c", "npm install && npm run build && node ./.output/server/index.mjs" ]
-    environment:
-      NUXT_HOST: 0.0.0.0
     tty: true
     networks:
       - zhbn-network

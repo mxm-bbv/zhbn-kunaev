@@ -19,7 +19,6 @@ services:
       - "443:443"
     volumes:
       - ./local/caddy/:/etc/caddy/
-      - /home/max/certs/:/data/local-certs/
       - caddy-config:/config
       - caddy-data:/data
       - ../projects:/var/projects
