@@ -1,0 +1,68 @@
+version: '3.8'
+
+volumes:
+  caddy-config:
+  caddy-data:
+
+networks:
+  zhbn-network:
+    driver: bridge
+    name: zhbn-network
+
+services:
+  caddy:
+    container_name: server
+    image: caddy/caddy:2.7.2-alpine
+    restart: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./local/caddy/:/etc/caddy/
+      - /home/max/certs/:/data/local-certs/
+      - caddy-config:/config
+      - caddy-data:/data
+      - ../projects:/var/projects
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+    networks:
+      - zhbn-network
+
+  database:
+    container_name: database
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_USER: ${DB_USERNAME:-zhbn}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE:-zhbn}
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+    networks:
+      - zhbn-network
+
+  redis:
+    image: bitnami/redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+    networks:
+      - zhbn-network

@@ -35,4 +35,4 @@ services:
     tty: true
     networks:
       - zhbn-network
-    entrypoint: ["/bin/sh", "-c", "npm install && npm run build && npm run preview"]
+    entrypoint: [ "/bin/sh", "-c", "npm install && npm run dev" ]
