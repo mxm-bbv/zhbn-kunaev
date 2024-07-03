@@ -1,8 +1,5 @@
 <template>
   <NuxtLayout :if="article">
-    <template #title>
-      {{ article.title }}
-    </template>
     <div class="news-list">
       <div class="news-list__container">
         <div class="news-list__content">

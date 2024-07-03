@@ -1,5 +1,5 @@
 <template>
-  <article class="news-list__item">
+  <article class="news-list__item" v-if="title">
     <div class="news-list__item-thumb">
       <img :srcset="`${thumb} 1x, ${thumb} 2x`" alt="thumbnail">
     </div>
