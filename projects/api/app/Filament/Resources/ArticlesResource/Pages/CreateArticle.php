@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\NewsResource\Pages;
+namespace App\Filament\Resources\ArticlesResource\Pages;
 
 use App\Filament\Resources\ArticlesResource;
 use Filament\Actions;

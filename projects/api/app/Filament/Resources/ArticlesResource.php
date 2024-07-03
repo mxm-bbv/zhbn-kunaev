@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NewsResource\Pages;
+use App\Filament\Resources\ArticlesResource\Pages;
 use App\Models\Article;
 use App\NewsStatusEnum;
 use Filament\Forms\Components\Group;
