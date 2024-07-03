@@ -24,7 +24,8 @@ class AcceptJson
                 'status' => false,
                 'data' => null,
                 'errors' => [
-                    'Accept header is incorrect'
+                    'Accept header is incorrect',
+                    $accept
                 ],
                 'message' => 'Fail'
             ],

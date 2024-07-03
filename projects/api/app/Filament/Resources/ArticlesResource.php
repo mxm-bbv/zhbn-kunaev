@@ -62,10 +62,7 @@ class ArticlesResource extends Resource
                                     ->directory('news-media')
                                     ->multiple()
                                     ->reorderable()
-//                                    ->rules([
-//                                        'files' => ['sometimes', 'array'],
-//                                        'files.*' => ['mimes:jpg,jpeg,png,webp']
-//                                    ])
+                                    ->rules(['sometimes', 'mimes:jpg,jpeg,png,webp'])
                                     ->customHeaders(['Cache-Control' => 'no-cache']),
                             ])
                     ]),

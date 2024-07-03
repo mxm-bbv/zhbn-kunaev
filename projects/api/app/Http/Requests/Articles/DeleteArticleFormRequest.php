@@ -4,7 +4,7 @@ namespace app\Http\Requests\Articles;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteNewsFormRequest extends FormRequest
+class DeleteArticleFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
