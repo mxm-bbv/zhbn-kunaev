@@ -1,10 +1,10 @@
 <template>
-  <NuxtLayout :if="article">
+  <NuxtLayout>
     <div class="news-list">
       <div class="news-list__container">
         <div class="news-list__content">
           <div class="news-list__content-top">
-            <div class="news-list__card">
+            <div class="news-list__card" v-if="article">
               <div class="news-list__card-slider">
                 <Swiper class="news-list__swiper swiper-container"
                         :modules="[Pagination]"
