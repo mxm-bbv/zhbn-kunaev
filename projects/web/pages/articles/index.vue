@@ -11,7 +11,7 @@
             <NewsItem
                 v-for="article in articles.data.articles"
                 :key="`article_${article.id}`"
-                :thumb="article?.thumb || articles.media[0].url"
+                :thumb="article?.thumb.url"
                 :date="article.published_date"
                 :title="article.title"
                 :description="article.description"
