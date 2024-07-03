@@ -1,0 +1,10 @@
+api.zhbn.local {
+    root * /var/projects/api/public
+    encode gzip zstd
+    file_server
+    php_fastcgi api:9000
+}
+
+zhbn.local {
+    reverse_proxy web:3000
+}

@@ -1,14 +1,45 @@
-import {fileURLToPath} from "node:url";
-
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  alias: {
-    'images': fileURLToPath(new URL('./assets/images', import.meta.url)),
-    'style': fileURLToPath(new URL('./assets/style', import.meta.url)),
-    'data': fileURLToPath(new URL('./assets/other/data', import.meta.url))
-  },
-  devServer: {
-    port: 3000,
-    host: 'zhbn.local'
-  },
+    css: ['@/assets/css/style.css'],
+
+    app: {
+        head: {
+            charset: 'UTF-8',
+            viewport: 'width=device-width, initial-scale=1.0',
+            title: 'ZHBN',
+            link: [
+                {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
+                {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: ""},
+                {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'}
+            ]
+        }
+    },
+
+    modules: ['nuxt-swiper', '@nuxt/image', '@nuxt-alt/proxy', "@nuxt/ui"],
+
+    swiper: {
+        prefix: 'Swiper',
+        modules: ['pagination']
+    },
+
+    colorMode: {
+        preference: 'light'
+    },
+
+    $production: {
+
+    },
+
+    $development: {
+        devtools: {
+            enabled: true,
+            timeline: {
+                enabled: true
+            }
+        },
+
+        devServer: {
+            port: 80,
+            host: 'zhbn.local'
+        },
+    }
 });

@@ -1,11 +1,26 @@
-<script setup lang="ts">
-const route = useRoute()
-</script>
-
 <template>
-  <div>
-    <h1>Nuxt Routing set up successfully!</h1>
-    <p>Current route: {{ route.path }}</p>
-    <a href="https://nuxt.com/docs/getting-started/routing" target="_blank">Learn more about Nuxt Routing</a>
-  </div>
+  <NuxtLayout>
+    <Parts />
+    <Hello />
+    <Services />
+    <Resources />
+    <Faq />
+    <Stats />
+    <News />
+    <ContactUs />
+  </NuxtLayout>
 </template>
+<script setup lang="ts">
+import ContactUs from "~/components/content/home/ContactUs.vue";
+import Parts from "~/components/content/home/Parts.vue";
+import Hello from "~/components/content/home/Hello.vue";
+import Services from "~/components/content/home/Services/index.vue";
+import Resources from "~/components/content/home/Resources.vue";
+import Faq from "~/components/content/home/Faq.vue";
+import Stats from "~/components/content/home/Stats.vue";
+import News from "~/components/content/home/News.vue";
+
+definePageMeta({
+  colorMode: 'light',
+})
+</script>
