@@ -26,7 +26,9 @@ export default defineNuxtConfig({
     },
 
     runtimeConfig: {
-        apiHost: process.env.API_HOST,
+        public: {
+            apiHost: 'https://api.zhbn.local/api/v1/'
+        }
     },
 
     $production: {},

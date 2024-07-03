@@ -64,7 +64,7 @@ let article = ref({});
 
 async function fetchArticle(slug) {
   try {
-    const data = await $fetch(`${config.apiHost}articles/${slug}`, {
+    const data = await $fetch(`${config.public.apiHost}articles/${slug}`, {
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'
