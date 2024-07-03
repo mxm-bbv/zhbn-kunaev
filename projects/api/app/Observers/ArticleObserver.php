@@ -9,7 +9,7 @@ class ArticleObserver
 {
     public function updated(Article $article) {
         $article->updateQuietly([
-            'slug' => Str::slug($article->title),
+            'slug' => Str::slug($article->title, language: config('app.locale')),
         ]);
     }
 }
