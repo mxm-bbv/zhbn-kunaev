@@ -16,6 +16,7 @@ return new class extends Migration
             $table->json('title');
             $table->json('description')->nullable();
             $table->integer('views')->default(0);
+            $table->text('slug')->nullable();
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamps();
             $table->softDeletes();
