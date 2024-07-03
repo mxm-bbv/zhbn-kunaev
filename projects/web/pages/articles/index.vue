@@ -29,6 +29,7 @@ import {ArticlesService} from "~/services/articles.service";
 import NewsItem from "~/pages/articles/item.vue"
 
 const articlesService = new ArticlesService();
+const config = useRuntimeConfig();
 
 definePageMeta({
   colorMode: 'light',
@@ -45,7 +46,7 @@ const articles = ref({
 
 async function fetchArticles(cursor = null) {
   try {
-    articles.value = await $fetch(`${process.env.API_HOST}articles`, {
+    articles.value = await $fetch(`${config.API_HOST}articles`, {
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'

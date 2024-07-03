@@ -24,6 +24,8 @@
 <script setup lang="ts">
 import NewsItem from "~/pages/articles/item.vue";
 
+const config = useRuntimeConfig();
+
 const articles = ref({
   data: {
     pagination: {
@@ -35,7 +37,7 @@ const articles = ref({
 
 async function fetchArticles(cursor = null) {
   try {
-    articles.value = await $fetch(`${process.env.API_HOST}articles`, {
+    articles.value = await $fetch(`${config.API_HOST}articles`, {
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'

@@ -25,9 +25,11 @@ export default defineNuxtConfig({
         preference: 'light'
     },
 
-    $production: {
-
+    runtimeConfig: {
+        API_HOST: process.env.API_HOST,
     },
+
+    $production: {},
 
     $development: {
         devtools: {

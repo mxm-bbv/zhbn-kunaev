@@ -54,6 +54,7 @@ import {Pagination} from "swiper/modules";
 import showdown from 'showdown';
 
 const route = useRoute();
+const config = useRuntimeConfig();
 
 definePageMeta({
   colorMode: 'light',
@@ -63,7 +64,7 @@ let article = ref({});
 
 async function fetchArticle(slug) {
   try {
-    const data = await $fetch(`${process.env.API_HOST}articles/${slug}`, {
+    const data = await $fetch(`${config.API_HOST}articles/${slug}`, {
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'
