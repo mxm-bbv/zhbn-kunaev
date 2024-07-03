@@ -46,7 +46,7 @@ const articles = ref({
 
 async function fetchArticles(cursor = null) {
   try {
-    articles.value = await $fetch(`${config.API_HOST}articles`, {
+    articles.value = await $fetch(`${config.apiHost}articles`, {
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'

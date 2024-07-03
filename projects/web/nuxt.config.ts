@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     },
 
     runtimeConfig: {
-        API_HOST: process.env.API_HOST,
+        apiHost: process.env.API_HOST,
     },
 
     $production: {},
