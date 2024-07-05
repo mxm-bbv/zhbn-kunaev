@@ -6,21 +6,22 @@
           <h2>Связаться с нами</h2>
         </div>
         <div class="contact-us__content-group">
-          <form id="contact-us" class="contact-us__form" action="" method="post">
+          <form id="contact-us" class="contact-us__form">
             <div class="contact-us__form-item">
-              <label for="">Ваше имя</label>
-              <input type="text" placeholder="Имя" required>
+              <label for="name">Ваше имя</label>
+              <input type="text" placeholder="Имя" id="name" v-model="form.name" required>
             </div>
             <div class="contact-us__form-item">
-              <label for="">Ваш Email</label>
-              <input type="text" placeholder="name@gmail.com" required>
+              <label for="email">Ваш Email</label>
+              <input type="text" placeholder="name@gmail.com" id="email" v-model="form.email" required>
             </div>
             <div class="contact-us__form-item">
-              <label for="">Сообщение</label>
-              <textarea placeholder="Хочу сообщить вам..." required form="contact-us" rows="4" cols="20"></textarea>
+              <label for="message">Сообщение</label>
+              <textarea placeholder="Хочу сообщить вам..." id="message" v-model="form.message" required
+                        form="contact-us" rows="4" cols="20"></textarea>
             </div>
             <div class="contact-us__form-item">
-              <button type="submit">
+              <button type="button" @click="sendRequest">
                 <div class="icon"></div>
                 Отправить
               </button>
@@ -59,3 +60,36 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+export default {
+  data() {
+    return {
+      form: {
+        name: "",
+        email: "",
+        message: ""
+      },
+      config: useRuntimeConfig()
+    }
+  },
+  methods: {
+    async sendRequest() {
+      await $fetch(`${this.config.public.apiHost}requests`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        },
+        body: this.form,
+        method: 'POST'
+      });
+
+      this.form = {
+        name: '',
+        email: '',
+        message: ''
+      }
+    }
+  }
+}
+</script>

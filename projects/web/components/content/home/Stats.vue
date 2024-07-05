@@ -18,13 +18,13 @@
           </li>
           <li class="stats__item">
               <span class="stats__value">
-                  <div class="stats__icon"></div> <span>518 кв.м.</span>
+                  <div class="stats__icon"></div> <span>739.1 кв.м.</span>
               </span>
             <span class="stats__description">Общая площадь<br>центра</span>
           </li>
           <li class="stats__item">
               <span class="stats__value">
-                  <div class="stats__icon"></div> <span>20+</span>
+                  <div class="stats__icon"></div> <span>34</span>
               </span>
             <span class="stats__description">Квалифицированных<br>сотрудников</span>
           </li>

@@ -32,7 +32,7 @@
             <ul class="passport__stats-list">
               <li class="passport__stats-item">
                             <span class="passport__stats-value">
-                                <div class="passport__icon"></div> <span>518 кв.м.</span>
+                                <div class="passport__icon"></div> <span>739.1 кв.м.</span>
                             </span>
                 <span class="passport__stats-description">Общая площадь<br>центра</span>
               </li>
@@ -58,7 +58,7 @@
               </li>
               <li class="passport__stats-item">
                 <span class="passport__stats-value">
-                    <div class="passport__icon"></div> <span>20+</span>
+                    <div class="passport__icon"></div> <span>34</span>
                 </span>
                 <span class="passport__stats-description">Количество сотрудников</span>
               </li>
